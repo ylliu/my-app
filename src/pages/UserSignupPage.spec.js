@@ -28,5 +28,11 @@ describe('UserSignupPage', () => {
             const passwordInput = queryByPlaceholderText('Your password');
             expect(passwordInput).toBeInTheDocument();
         });
+        it('has password type for password input', () => {
+            const { queryByPlaceholderText } = render(<UserSignupPage />);
+            const passwordInput = queryByPlaceholderText('Your password');
+            expect(passwordInput.type).toBe('password');
+
+        });
     })
 })
