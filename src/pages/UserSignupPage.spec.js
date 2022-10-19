@@ -1,9 +1,10 @@
 import React from "react";
-import { 
+import {
     render,
     cleanup,
-    fireEvent, 
-    waitForElementToBeRemoved
+    fireEvent,
+    waitForElementToBeRemoved,
+    waitFor
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { UserSignupPage } from './UserSignupPage';
@@ -178,9 +179,9 @@ describe('UserSignupPage', () => {
                 postSignup: mockAsyncDelayed()
             };
 
-            const { queryByText } = setupForSubmit({ actions }); 
+            const { queryByText } = setupForSubmit({ actions });
             fireEvent.click(button);
-            
+
             const spinner = queryByText('Loading...');
             expect(spinner).toBeInTheDocument();
         });
@@ -190,11 +191,11 @@ describe('UserSignupPage', () => {
                 postSignup: mockAsyncDelayed()
             };
 
-            const { queryByText } = setupForSubmit({ actions }); 
+            const { queryByText } = setupForSubmit({ actions });
             fireEvent.click(button);
-            
+
             await waitForElementToBeRemoved(() => queryByText('Loading...'))
-            
+
             const spinner = queryByText('Loading...');
             expect(spinner).not.toBeInTheDocument();
         });
@@ -212,14 +213,34 @@ describe('UserSignupPage', () => {
                 })
             };
 
-            const { queryByText } = setupForSubmit({ actions }); 
+            const { queryByText } = setupForSubmit({ actions });
             fireEvent.click(button);
-            
+
             await waitForElementToBeRemoved(() => queryByText('Loading...'))
-            
+
             const spinner = queryByText('Loading...');
             expect(spinner).not.toBeInTheDocument();
         });
+
+        it('displays validation error for displayName when error is received for the for field', async () => {
+            const actions = {
+                postSignup: jest.fn().mockRejectedValue({
+                    response: {
+                        data: {
+                            validationErrors: {
+                                displayName: 'Cannot be null'
+                            }
+                        }
+                    }
+                })
+            }
+            const { queryByText } = setupForSubmit({ actions });
+            fireEvent.click(button);
+
+            await waitFor(() => {
+                expect(queryByText('Cannot be null')).toBeInTheDocument();
+            });
+        })
     })
 })
 
