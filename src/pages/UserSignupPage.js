@@ -1,5 +1,5 @@
 import React from "react";
-
+import Input from "../components/input"
 export class UserSignupPage extends React.Component {
 
     state = {
@@ -8,7 +8,7 @@ export class UserSignupPage extends React.Component {
         password: '',
         repeatPassword: '',
         pendingApiCall: false,
-        errors:{}
+        errors: {}
     };
 
     onChangeDisplayName = (event) => {
@@ -39,16 +39,16 @@ export class UserSignupPage extends React.Component {
         }
         this.setState({ pendingApiCall: true });
         this.props.actions.postSignup(user)
-        .then((response)=>{
-            this.setState({ pendingApiCall: false });
-        })
-        .catch((apiError)=>{
-            let errors = {...this.state.errors}
-            if(apiError.response.data&&apiError.response.data.validationErrors){
-                errors = {...apiError.response.data.validationErrors}
-            }
-            this.setState({ pendingApiCall: false, errors });
-        });
+            .then((response) => {
+                this.setState({ pendingApiCall: false });
+            })
+            .catch((apiError) => {
+                let errors = { ...this.state.errors }
+                if (apiError.response.data && apiError.response.data.validationErrors) {
+                    errors = { ...apiError.response.data.validationErrors }
+                }
+                this.setState({ pendingApiCall: false, errors });
+            });
     };
 
     render() {
@@ -56,41 +56,45 @@ export class UserSignupPage extends React.Component {
             <div className="container">
                 <h1 className="text-center">Sign Up</h1>
                 <div className="col-12 mb-3">
-                    <lable>Display Name</lable>
-                    <input
-                        className="form-control"
+                    <Input
+                        label="Display name"
                         placeholder="Your display name"
                         value={this.state.displayName}
                         onChange={this.onChangeDisplayName}
+                        hasError={this.state.errors.displayName && true}
+                        error={this.state.errors.displayName}
                     />
-                    <div className="invalid-feedback">
-                        {this.state.errors.displayName}
-                    </div>
                 </div>
                 <div className="col-12 mb-3">
-                    <lable>Username</lable>
-                    <input
-                        className="form-control"
+                    <Input
+                        label="Username"
                         placeholder="Your username"
                         value={this.state.username}
                         onChange={this.onChangeUsername}
+                        hasError={this.state.errors.username && true}
+                        error={this.state.errors.username}
                     />
                 </div>
                 <div className="col-12 mb-3">
-                    <lable>Password</lable>
-                    <input
-                        className="form-control"
+                    <Input
+                        label="Password"
                         placeholder="Your password" type={'password'}
                         value={this.state.password}
-                        onChange={this.onChangePassword} />
+                        onChange={this.onChangePassword}
+                        hasError={this.state.errors.password && true}
+                        error={this.state.errors.password}
+                    />
+
                 </div>
                 <div className="col-12 mb-3">
-                    <lable>Password repeat</lable>
-                    <input
-                        className="form-control"
+                    <Input
+                        label="Password repeat"
                         placeholder="Repeat your password" type={'password'}
                         value={this.repeatPassword}
-                        onChange={this.onChangeRepeatPassword} />
+                        onChange={this.onChangeRepeatPassword}
+                        hasError={this.state.errors.repeatPassword && true}
+                        error={this.state.errors.password}
+                    />
                 </div>
                 <div className="text-center">
                     <button className="btn btn-primary"
