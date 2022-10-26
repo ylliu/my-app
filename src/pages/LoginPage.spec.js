@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { LoginPage } from './LoginPage';
 
 describe('LoginPage', () => {
@@ -53,6 +53,7 @@ describe('Interaction', () => {
         passwordInput = queryByPlaceholderText('Your password');
         fireEvent.change(passwordInput, changeEvent('P4ssword'));
         button = container.querySelector('button');
+        return rendered;
     }
     it('sets the username value into state', () => {
         const { queryByPlaceholderText } = render(<LoginPage />);
@@ -102,8 +103,72 @@ describe('Interaction', () => {
     });
     it('disables the button when username is not empty', () => {
         setupForSubmit();
-        fireEvent.change(usernameInput,changeEvent(''))
-        expect(button).not.toBeDisabled();
+        fireEvent.change(usernameInput, changeEvent(''));
+        expect(button).toBeDisabled();
+    });
+
+    it('disables the button when password is not empty', () => {
+        setupForSubmit();
+        fireEvent.change(passwordInput, changeEvent(''));
+        expect(button).toBeDisabled();
+    });
+
+    it('displays alert when login fails', async () => {
+        const actions = {
+            postLogin: jest.fn().mockRejectedValue({
+                response: {
+                    data: {
+                        message: 'Login failed'
+                    }
+                }
+            })
+        };
+        const { queryByText } = setupForSubmit({ actions });
+        fireEvent.click(button);
+        await waitFor(() => {
+            expect(queryByText('Login failed')).toBeInTheDocument();
+        });
+    });
+    it('clears alert when user changes username', async () => {
+        const actions = {
+            postLogin: jest.fn().mockRejectedValue({
+                response: {
+                    data: {
+                        message: 'Login failed'
+                    }
+                }
+            })
+        };
+        const { queryByText } = setupForSubmit({ actions });
+        fireEvent.click(button);
+        await waitFor(() => {
+            queryByText('Login failed');
+        });
+
+        fireEvent.change(usernameInput, changeEvent('updated-username'));
+        alert = queryByText('Login failed');
+        expect(alert).not.toBeInTheDocument();
+    });
+
+    it('clears alert when user changes password', async () => {
+        const actions = {
+            postLogin: jest.fn().mockRejectedValue({
+                response: {
+                    data: {
+                        message: 'Login failed'
+                    }
+                }
+            })
+        };
+        const { queryByText } = setupForSubmit({ actions });
+        fireEvent.click(button);
+        await waitFor(() => {
+            queryByText('Login failed');
+        });
+
+        fireEvent.change(passwordInput, changeEvent('updated-P4ssword'));
+        alert = queryByText('Login failed');
+        expect(alert).not.toBeInTheDocument();
     });
 
 })

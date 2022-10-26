@@ -4,20 +4,23 @@ export class LoginPage extends React.Component {
 
     state = {
         username: '',
-        password: ''
+        password: '',
+        apiError: 'Login failure'
     }
 
     onChangeUsername = (event) => {
         const value = event.target.value;
         this.setState({
-            username: value
+            username: value,
+            apiError: undefined
         })
     }
 
     onChangePassword = (event) => {
         const value = event.target.value;
         this.setState({
-            password: value
+            password: value,
+            apiError: undefined
         })
     }
 
@@ -26,9 +29,22 @@ export class LoginPage extends React.Component {
             username: this.state.username,
             password: this.state.password
         }
-        this.props.actions.postLogin(body);
+        this.props.actions
+            .postLogin(body)
+            .catch(error => {
+                if (error.response) {
+                    this.setState({ apiError: error.response.data.message })
+                }
+            });
     }
     render() {
+        let disableSubmit = false;
+        if (this.state.username === '') {
+            disableSubmit = true;
+        }
+        if (this.state.password === '') {
+            disableSubmit = true;
+        }
         return (
             <div className="container">
                 <h1 className="text-center">Login</h1>
@@ -50,8 +66,13 @@ export class LoginPage extends React.Component {
                         onChange={this.onChangePassword}
                     ></Input>
                 </div>
+                {this.state.apiError && (
+                    <div className="col-12 mb-3">
+                        <div className="alert alert-danger">{this.state.apiError}</div>
+                    </div>
+                )}
                 <div className="text-center">
-                    <button className="btn btn-primary" onClick={this.onClickLogin}>Login</button>
+                    <button className="btn btn-primary" onClick={this.onClickLogin} disabled={disableSubmit}>Login</button>
                 </div>
             </div>
         )
