@@ -21,6 +21,13 @@ export class LoginPage extends React.Component {
         })
     }
 
+    onClickLogin = () => {
+        const body = {
+            username: this.state.username,
+            password: this.state.password
+        }
+        this.props.actions.postLogin(body);
+    }
     render() {
         return (
             <div className="container">
@@ -44,10 +51,20 @@ export class LoginPage extends React.Component {
                     ></Input>
                 </div>
                 <div className="text-center">
-                    <button className="btn btn-primary">Login</button>
+                    <button className="btn btn-primary" onClick={this.onClickLogin}>Login</button>
                 </div>
             </div>
         )
+    }
+
+}
+
+LoginPage.defaultProps = {
+    actions: {
+        postLogin: () =>
+            new Promise((resolve, reject) => {
+                resolve({});
+            })
     }
 
 }
