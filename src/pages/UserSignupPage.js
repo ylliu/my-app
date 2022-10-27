@@ -1,5 +1,7 @@
 import React from "react";
 import Input from "../components/input"
+import ButtomWithProgress from "../components/ButtomWithProgress";
+
 export class UserSignupPage extends React.Component {
 
     state = {
@@ -23,7 +25,7 @@ export class UserSignupPage extends React.Component {
         const value = event.target.value;
         const errors = { ...this.state.errors };
         delete errors.username;
-        this.setState({ username: value ,errors});
+        this.setState({ username: value, errors });
     };
 
     onChangePassword = (event) => {
@@ -109,18 +111,14 @@ export class UserSignupPage extends React.Component {
                     />
                 </div>
                 <div className="text-center">
-                    <button className="btn btn-primary"
+                    <ButtomWithProgress
                         onClick={this.onClickSignup}
                         disabled={
                             this.state.pendingApiCall || !this.state.passwordRepeatConfirmed
                         }
-                    >
-                        {this.state.pendingApiCall && (
-                            <div className="spinner-border text-light spinner-border-sm mr-l" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        )}
-                        Sign Up</button>
+                        pendingApiCall={this.state.pendingApiCall}
+                        text="Sign Up"
+                    />
                 </div>
             </div>
         )
