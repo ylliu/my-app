@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+
+import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import { UserSignupPage } from './pages/UserSignupPage';
-import{LoginPage} from './pages/LoginPage';
+import App from './containers/App';
 import * as apiCalls from './api/apiCalls';
 
 const actions = {
@@ -14,7 +14,7 @@ const actions = {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <LoginPage actions={actions} />
+    <HashRouter> <App /></HashRouter>
   </React.StrictMode>
 );
 
