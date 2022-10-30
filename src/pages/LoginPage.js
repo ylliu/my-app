@@ -1,6 +1,7 @@
 import React from "react";
 import Input from "../components/input";
 import ButtomWithProgress from "../components/ButtomWithProgress";
+
 export class LoginPage extends React.Component {
 
     state = {
@@ -35,7 +36,9 @@ export class LoginPage extends React.Component {
         this.props.actions
             .postLogin(body)
             .then((response) => {
-                this.setState({ pendingApiCall: false });
+                this.setState({ pendingApiCall: false }, () =>
+                    this.props.history.push('/')
+                );
             })
             .catch(error => {
                 if (error.response) {
@@ -97,7 +100,11 @@ LoginPage.defaultProps = {
             new Promise((resolve, reject) => {
                 resolve({});
             })
+    },
+    history: {
+        push: () => { }
     }
+
 
 }
 

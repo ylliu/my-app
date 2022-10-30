@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitForElementToBeRemoved, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitForElementToBeRemoved, waitFor, queryByText, queryByTestId } from '@testing-library/react';
 import { LoginPage } from './LoginPage';
 
 describe('LoginPage', () => {
@@ -238,6 +238,22 @@ describe('Interaction', () => {
         const spinner = queryByText('Loading...');
         expect(spinner).not.toBeInTheDocument();
     });
+
+    it('redirects to homepage after successful login', async () => {
+        const actions = {
+            postLogin: jest.fn().mockResolvedValue({})
+
+        };
+        const history = {
+            push: jest.fn()
+        }
+        setupForSubmit({ actions, history });
+        fireEvent.click(button);
+        await waitFor(() => expect(history.push).toHaveBeenCalledWith('/'));
+
+    });
+
+
 
 })
 
