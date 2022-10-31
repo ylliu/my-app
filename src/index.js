@@ -9,16 +9,27 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import authReducer from './redux/authReducer';
 
-const store = createStore(authReducer);
+const loggedInState = {
+  id: 1,
+  username: 'user1',
+  displayName: 'display1',
+  image: 'profile1.png',
+  password: 'P4ssword',
+  isLoggedIn: true
+};
+
+const store = createStore(authReducer, loggedInState);
 ReactDOM.render(
-  <Provider>
-    <React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+
       <HashRouter>
         <App />
       </HashRouter>
-    </React.StrictMode>,
-    document.getElementById('root')
-  </Provider>
+    </Provider>
+
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
