@@ -5,14 +5,20 @@ import './index.css';
 import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import App from './containers/App';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import authReducer from './redux/authReducer';
 
+const store = createStore(authReducer);
 ReactDOM.render(
-  <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+  <Provider>
+    <React.StrictMode>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </React.StrictMode>,
+    document.getElementById('root')
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
