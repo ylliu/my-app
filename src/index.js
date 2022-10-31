@@ -23,7 +23,6 @@ const store = createStore(authReducer, loggedInState, applyMiddleware(logger));
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-
       <HashRouter>
         <App />
       </HashRouter>
